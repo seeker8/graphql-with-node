@@ -14,12 +14,17 @@ type Course {
 
 type Query {
     getCourses: [Course]
+    getCourse(id: ID!): Course
 }
 `)
 
 const root = {
   getCourses() {
     return courses
+  },
+  getCourse({ id }) {
+    console.log("getCourse" + id)
+    return courses.find((course) => course.id === id)
   }
 }
 
