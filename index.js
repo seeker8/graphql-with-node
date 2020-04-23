@@ -3,10 +3,19 @@ const {
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLString,
-  graphql,
+  GraphQLInt,
+  graphql
 } = require("graphql")
 
 const app = express()
+
+const courseType = new GraphQLObjectType({
+  name: "Course",
+  fields: {
+    title: { type: GraphQLString },
+    views: { type: GraphQLInt }
+  }
+})
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -16,10 +25,16 @@ const schema = new GraphQLSchema({
         type: GraphQLString,
         resolve() {
           return "Hola Mundo"
-        },
+        }
       },
-    },
-  }),
+      course: {
+        type: courseType,
+        resolve() {
+          return { title: "GraphQL course", views: 1000 }
+        }
+      }
+    }
+  })
 })
 
 app.get("/", (req, res) => {
@@ -28,6 +43,9 @@ app.get("/", (req, res) => {
     `
       {
         message
+        course {
+          title
+        }
       }
     `
   ).then((r) => res.send(r))
