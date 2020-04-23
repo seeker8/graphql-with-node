@@ -23,7 +23,6 @@ const root = {
     return courses
   },
   getCourse({ id }) {
-    console.log("getCourse" + id)
     return courses.find((course) => course.id === id)
   }
 }
