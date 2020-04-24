@@ -1,7 +1,7 @@
 const express = require("express")
 const { buildSchema } = require("graphql")
 const graphqlHttp = require("express-graphql")
-const courses = require("./courses")
+let courses = require("./courses")
 
 const app = express()
 
@@ -22,9 +22,14 @@ type Query {
     getCourse(id: ID!): Course
 }
 
+type Alert {
+    message: String
+}
+
 type Mutation {
     addCourse(input: CourseInput): Course
     updateCourse(id:ID!, input: CourseInput): Course
+    deleteCourse(id:ID!): Alert
 }
 `)
 
@@ -48,6 +53,10 @@ const root = {
     course.title = title || course.title
     course.views = views || course.views
     return course
+  },
+  deleteCourse({ id }) {
+    courses = courses.filter((course) => course.id != id)
+    return { message: `The course ${id} has been removed.` }
   }
 }
 
