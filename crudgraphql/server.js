@@ -35,7 +35,7 @@ type Mutation {
 
 const root = {
   getCourses({ page, limit }) {
-    if (limit >= courses.length) return courses
+    if (limit >= courses.length || page == undefined) return courses
     let start = page * limit - limit
     let end = start + limit
     return courses.slice(start, end)
