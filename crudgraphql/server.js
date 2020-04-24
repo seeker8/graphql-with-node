@@ -18,7 +18,7 @@ input CourseInput {
 }
 
 type Query {
-    getCourses: [Course]
+    getCourses(page: Int, limit: Int = 1): [Course]
     getCourse(id: ID!): Course
 }
 
@@ -34,8 +34,11 @@ type Mutation {
 `)
 
 const root = {
-  getCourses() {
-    return courses
+  getCourses({ page, limit }) {
+    if (limit >= courses.length) return courses
+    let start = page * limit - limit
+    let end = start + limit
+    return courses.slice(start, end)
   },
   getCourse({ id }) {
     return courses.find((course) => course.id === id)
