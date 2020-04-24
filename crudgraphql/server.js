@@ -16,6 +16,10 @@ type Query {
     getCourses: [Course]
     getCourse(id: ID!): Course
 }
+
+type Mutation {
+    addCourse(title: String!, views: Int): Course
+}
 `)
 
 const root = {
@@ -24,6 +28,12 @@ const root = {
   },
   getCourse({ id }) {
     return courses.find((course) => course.id === id)
+  },
+  addCourse({ title, views = 0 }) {
+    const id = String(courses.length + 1)
+    const newCourse = { id, title, views }
+    courses.push(newCourse)
+    return newCourse
   }
 }
 
