@@ -12,14 +12,19 @@ type Course {
     views: Int
 }
 
+input CourseInput {
+    title: String!
+    views: Int
+}
+
 type Query {
     getCourses: [Course]
     getCourse(id: ID!): Course
 }
 
 type Mutation {
-    addCourse(title: String!, views: Int): Course
-    updateCourse(id:ID!, title: String!, views: Int): Course
+    addCourse(input: CourseInput): Course
+    updateCourse(id:ID!, input: CourseInput): Course
 }
 `)
 
@@ -30,13 +35,15 @@ const root = {
   getCourse({ id }) {
     return courses.find((course) => course.id === id)
   },
-  addCourse({ title, views = 0 }) {
+  addCourse({ input }) {
+    const { title, views = 0 } = input
     const id = String(courses.length + 1)
     const newCourse = { id, title, views }
     courses.push(newCourse)
     return newCourse
   },
-  updateCourse({ id, title, views = 0 }) {
+  updateCourse({ id, input }) {
+    const { title, views } = input
     const course = courses.find((course) => course.id === id)
     course.title = title || course.title
     course.views = views || course.views
