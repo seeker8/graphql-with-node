@@ -1,6 +1,6 @@
 const { ApolloServer } = require("apollo-server")
 const { makeExecutableSchema } = require("graphql-tools")
-const courses = require("./courses")
+let courses = require("./courses")
 
 const typeDefs = `
 type Course {
@@ -19,8 +19,14 @@ type Query {
     getCourse(id: ID!): Course
 }
 
+type Alert {
+    message: String
+}
+
 type Mutation {
     addCourse(input: CourseInput): Course
+    updateCourse(id:ID!, input: CourseInput): Course
+    deleteCourse(id:ID!): Alert
 }
 `
 
@@ -31,6 +37,9 @@ const resolvers = {
       let start = page * limit - limit
       let end = start + limit
       return courses.slice(start, end)
+    },
+    getCourse(obj, { id }) {
+      return courses.find((course) => course.id === id)
     }
   },
   Mutation: {
@@ -40,6 +49,17 @@ const resolvers = {
       const newCourse = { id, title, views }
       courses.push(newCourse)
       return newCourse
+    },
+    updateCourse(obj, { id, input }) {
+      const { title, views } = input
+      const course = courses.find((course) => course.id === id)
+      course.title = title || course.title
+      course.views = views || course.views
+      return course
+    },
+    deleteCourse(obj, { id }) {
+      courses = courses.filter((course) => course.id != id)
+      return { message: `The course ${id} has been removed.` }
     }
   }
 }
