@@ -1,5 +1,6 @@
 const { ApolloServer } = require("apollo-server")
 const { makeExecutableSchema } = require("graphql-tools")
+const courses = require("./courses")
 
 const typeDefs = `
 type Course {
@@ -16,7 +17,16 @@ type Query {
 
 const schema = makeExecutableSchema({
   typeDefs,
-  resolvers: {}
+  resolvers: {
+    Query: {
+      getCourses(obj, { page, limit }) {
+        if (limit >= courses.length || page == undefined) return courses
+        let start = page * limit - limit
+        let end = start + limit
+        return courses.slice(start, end)
+      }
+    }
+  }
 })
 
 const server = new ApolloServer({
