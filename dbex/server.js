@@ -7,6 +7,8 @@ const { merge } = require("lodash")
 
 const courseTypeDefs = require("./types/course.types")
 const courseResolvers = require("./resolvers/course.resolvers")
+const userTypeDefs = require("./types/user.types")
+const userResolvers = require("./resolvers/user.resolvers")
 
 const port = 3000
 mongoose.connect("mongodb://localhost:27017/graphql_course", {
@@ -32,8 +34,8 @@ type Mutation {
 const resolvers = {}
 
 const schema = makeExecutableSchema({
-  typeDefs: [courseTypeDefs, typeDefs],
-  resolvers: merge(resolvers, courseResolvers)
+  typeDefs: [courseTypeDefs, userTypeDefs, typeDefs],
+  resolvers: merge(resolvers, courseResolvers, userResolvers)
 })
 
 const app = express()
