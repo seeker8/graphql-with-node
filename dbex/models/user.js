@@ -5,7 +5,13 @@ const userSchema = new mongoose.Schema({
   hashedPassword: {
     type: String
   },
-  token: String
+  token: String,
+  courses: [
+    {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Course"
+    }
+  ]
 })
 
 module.exports = mongoose.model("User", userSchema)

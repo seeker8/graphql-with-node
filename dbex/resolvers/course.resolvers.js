@@ -1,9 +1,10 @@
 const Course = require("../models/course")
+const User = require("../models/user")
 
 module.exports = {
   Query: {
     async getCourses(obj, { page, limit }) {
-      let courses = Course.find()
+      let courses = Course.find().populate("user")
       if (page) {
         courses = courses.limit(limit).skip(page * limit - limit)
       }
@@ -14,9 +15,12 @@ module.exports = {
     }
   },
   Mutation: {
-    async addCourse(obj, { input }) {
-      const course = new Course(input)
+    async addCourse(obj, { input, userId }) {
+      const user = await User.findById(userId)
+      const course = new Course({ ...input, user: userId })
       await course.save()
+      user.courses.push(course)
+      await user.save()
       return course
     },
     async updateCourse(obj, { id, input }) {
