@@ -14,7 +14,14 @@ module.exports = {
     async signUp(obj, { input }) {
       return await new User(input).save()
     },
-    logIn(obj, { input }) {},
+    async logIn(obj, { input }) {
+      try {
+        return await User.authenticate(input)
+      } catch (error) {
+        console.log(error)
+        return null
+      }
+    },
     signOut(obj, { input }) {}
   },
   User: {
