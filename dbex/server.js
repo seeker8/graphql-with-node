@@ -1,7 +1,6 @@
 const express = require("express")
 const mongoose = require("mongoose")
-const { graphqlExpress, graphiqlExpress } = require("graphql-server-express")
-const { makeExecutableSchema } = require("graphql-tools")
+const { ApolloServer } = require("apollo-server-express")
 const bodyParser = require("body-parser")
 const { merge } = require("lodash")
 
@@ -33,28 +32,14 @@ type Mutation {
 
 const resolvers = {}
 
-const schema = makeExecutableSchema({
+const server = new ApolloServer({
   typeDefs: [courseTypeDefs, userTypeDefs, typeDefs],
   resolvers: merge(resolvers, courseResolvers, userResolvers)
 })
 
 const app = express()
 
-app.use(
-  "/graphql",
-  bodyParser.json(),
-  graphqlExpress({
-    schema
-  })
-)
-
-app.use(
-  "/graphiql",
-  graphiqlExpress({
-    endpointURL: "/graphql"
-  })
-)
-
+server.applyMiddleware({ app })
 app.listen(port, () => {
   console.log(`Listening on port ${port}`)
 })
