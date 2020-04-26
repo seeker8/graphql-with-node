@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const { graphqlExpress, graphiqlExpress } = require("graphql-server-express")
 const { makeExecutableSchema } = require("graphql-tools")
 const bodyParser = require("body-parser")
+const courseTypeDefs = require("./types/course.types")
 
 const port = 3000
 mongoose.connect("mongodb://localhost:27017/graphql_course", {
@@ -30,7 +31,7 @@ const resolvers = {
 }
 
 const schema = makeExecutableSchema({
-  typeDefs,
+  typeDefs: [courseTypeDefs, typeDefs],
   resolvers
 })
 
