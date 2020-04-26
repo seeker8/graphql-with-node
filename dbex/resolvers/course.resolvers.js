@@ -17,16 +17,12 @@ module.exports = {
       await course.save()
       return course
     },
-    updateCourse(obj, { id, input }) {
-      const { title, views } = input
-      const course = courses.find((course) => course.id === id)
-      course.title = title || course.title
-      course.views = views || course.views
-      return course
+    async updateCourse(obj, { id, input }) {
+      return await Course.findByIdAndUpdate(id, input)
     },
-    deleteCourse(obj, { id }) {
-      courses = courses.filter((course) => course.id != id)
-      return { message: `The course ${id} has been removed.` }
+    async deleteCourse(obj, { id }) {
+      const result = await Course.deleteOne({ _id: id })
+      return { message: `${result.deletedCount} element(s) removed.` }
     }
   }
 }
