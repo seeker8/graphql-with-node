@@ -1,11 +1,13 @@
 const Course = require("../models/course")
 
-let courses = []
 module.exports = {
   Query: {
     async getCourses(obj, { page, limit }) {
-      const courses = await Course.find()
-      return courses
+      let courses = Course.find()
+      if (page) {
+        courses = courses.limit(limit).skip(page * limit - limit)
+      }
+      return await courses
     },
     async getCourse(obj, { id }) {
       return await Course.findById(id)
