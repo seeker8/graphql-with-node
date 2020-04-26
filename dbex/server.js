@@ -11,7 +11,8 @@ const courseResolvers = require("./resolvers/course.resolvers")
 const port = 3000
 mongoose.connect("mongodb://localhost:27017/graphql_course", {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false
 })
 
 const typeDefs = `
