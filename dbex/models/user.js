@@ -1,5 +1,7 @@
 const mongoose = require("mongoose")
 const bcrypt = require("bcrypt")
+const jw = require("jsonwebtoken")
+const { key } = require("../libs/env")
 
 const userSchema = new mongoose.Schema({
   email: String,
@@ -28,9 +30,11 @@ userSchema.pre("validate", async function () {
 
 userSchema.statics.authenticate = async function ({ email, password }) {
   const user = await this.findOne({ email })
-  console.log(user)
   const valid = await bcrypt.compare(password, user.hashedPassword)
   if (!valid) throw new Error("Email or Password are wrong")
+
+  user.token = jw.sign({ id: user.id }, key)
+
   return user
 }
 
