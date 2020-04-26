@@ -8,6 +8,7 @@ const courseTypeDefs = require("./types/course.types")
 const courseResolvers = require("./resolvers/course.resolvers")
 const userTypeDefs = require("./types/user.types")
 const userResolvers = require("./resolvers/user.resolvers")
+const auth = require("./libs/auth")
 
 const port = 3000
 mongoose.connect("mongodb://localhost:27017/graphql_course", {
@@ -17,29 +18,30 @@ mongoose.connect("mongodb://localhost:27017/graphql_course", {
 })
 
 const typeDefs = `
-type Alert {
+  type Alert {
     message: String
-}
+  }
 
-type Query {
+  type Query {
     _: Boolean
-}
+  }
 
-type Mutation {
+  type Mutation {
     _: Boolean
-}
+  }
 `
 
 const resolvers = {}
 
 const server = new ApolloServer({
   typeDefs: [courseTypeDefs, userTypeDefs, typeDefs],
-  resolvers: merge(resolvers, courseResolvers, userResolvers)
+  resolvers: merge(resolvers, courseResolvers, userResolvers),
+  context: auth
 })
 
 const app = express()
 
 server.applyMiddleware({ app })
-app.listen(port, () => {
+app.listen({ port }, () => {
   console.log(`Listening on port ${port}`)
 })
