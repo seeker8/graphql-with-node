@@ -28,10 +28,7 @@ type Mutation {
 }
 `
 
-const resolvers = {
-  Query: {},
-  Mutation: {}
-}
+const resolvers = {}
 
 const schema = makeExecutableSchema({
   typeDefs: [courseTypeDefs, typeDefs],
