@@ -3,14 +3,12 @@ const Course = require("../models/course")
 let courses = []
 module.exports = {
   Query: {
-    getCourses(obj, { page, limit }) {
-      if (limit >= courses.length || page == undefined) return courses
-      let start = page * limit - limit
-      let end = start + limit
-      return courses.slice(start, end)
+    async getCourses(obj, { page, limit }) {
+      const courses = await Course.find()
+      return courses
     },
-    getCourse(obj, { id }) {
-      return courses.find((course) => course.id === id)
+    async getCourse(obj, { id }) {
+      return await Course.findById(id)
     }
   },
   Mutation: {
