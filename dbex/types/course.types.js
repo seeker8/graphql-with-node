@@ -3,7 +3,7 @@ type Course {
     id: ID!
     title: String!
     views: Int,
-    user: String
+    user: User
 }
 
 input CourseInput {

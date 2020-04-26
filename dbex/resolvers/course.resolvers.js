@@ -4,7 +4,7 @@ const User = require("../models/user")
 module.exports = {
   Query: {
     async getCourses(obj, { page, limit }) {
-      let courses = Course.find().populate("user")
+      let courses = Course.find()
       if (page) {
         courses = courses.limit(limit).skip(page * limit - limit)
       }
@@ -29,6 +29,11 @@ module.exports = {
     async deleteCourse(obj, { id }) {
       const result = await Course.deleteOne({ _id: id })
       return { message: `${result.deletedCount} element(s) removed.` }
+    }
+  },
+  Course: {
+    async user(course) {
+      return await User.findById(course.user)
     }
   }
 }

@@ -4,7 +4,7 @@ const Course = require("../models/course")
 module.exports = {
   Query: {
     async getUsers() {
-      return await User.find().populate("courses")
+      return await User.find()
     },
     async getUser(obj, { id }) {
       return await User.findById(id)
@@ -16,5 +16,10 @@ module.exports = {
     },
     logIn(obj, { input }) {},
     signOut(obj, { input }) {}
+  },
+  User: {
+    async courses(user) {
+      return await Course.find({ user: user.id })
+    }
   }
 }
