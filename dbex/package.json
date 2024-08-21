@@ -19,6 +19,6 @@
     "graphql-tools": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
-    "mongoose": "^5.9.10"
+    "mongoose": "^5.13.20"
   }
 }
